@@ -8,7 +8,13 @@ function printMessage(username,badgeCount,points){
 
 //Connect to API URL
 var req = https.get("https://teamtreehouse.com/" + username + ".json", function(res){
-    console.log(res.statusCode);
+    var body = "";
+    res.on("data",function(chunk){
+        body += chunk;
+    }).on("end",function(){
+        var profile = JSON.parse(body);
+        printMessage(username,profile.badges.length,profile.points.JavaScript);
+    });
 });
 
 //Handle a error on req
